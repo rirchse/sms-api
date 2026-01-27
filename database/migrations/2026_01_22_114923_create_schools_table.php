@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('domain')->unique(); // school1.com
-            $table->boolean('status')->default(true);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
