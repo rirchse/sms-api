@@ -15,12 +15,11 @@ return new class extends Migration
             $table->id();
             // Relationships
             $table->foreignId('school_id')->constrained();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            // $table->foreignId('guardian_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable();
             
             // Student Information
             $table->string('class_name')->nullable();
-            $table->string('student_name')->nullable();
+            $table->string('name')->nullable();
             $table->string('gender')->nullable();
             $table->date('dob')->nullable();
             $table->string('stay_type')->nullable();

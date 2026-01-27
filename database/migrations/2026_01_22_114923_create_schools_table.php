@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('domain')->unique(); // school1.com
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

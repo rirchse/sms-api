@@ -3,22 +3,19 @@
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-// use \Stancl\Tenancy\Middleware\PreventAccessFromTenantDomains::class;
-use App\Http\Controllers\SchoolController;
-use App\Http\Controllers\AdmissionController;
+use App\Http\Controllers\Api\SchoolController;
+use App\Http\Controllers\Api\AdmissionController;
 
-
-Route::middleware(['tenant.domain'])->group(function ()
+Route::middleware(['school'])->group(function ()
 {
   Route::post('/register', [AuthController::class, 'register']);
   Route::post('/login', [AuthController::class, 'login']);
 
   Route::get('/school/profile', [SchoolController::class, 'profile']);
-  Route::post('/admission', [AdmissionController::class, 'store']);
 
   Route::controller(AdmissionController::class)->group(function ()
   {
-    Route::post('/admission', 'admission');
+    Route::post('/admission', 'store');
   });
 
   Route::middleware('auth:sanctum')->group(function ()
@@ -40,10 +37,4 @@ Route::middleware(['tenant.domain'])->group(function ()
       );
     
   });
-});
-
-Route::get('/_debug', function () {
-  return [
-      'tenant' => tenant()?->id,
-  ];
 });

@@ -7,13 +7,6 @@ use Illuminate\Http\Request;
 
 class SchoolController extends Controller
 {
-    public function profile()
-    {
-        return response()->json([
-            'id' => tenant('id'),
-            'name' => tenant('name'),
-        ]);
-    }
     /**
      * Display a listing of the resource.
      */
@@ -52,5 +45,10 @@ class SchoolController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function profile()
+    {
+      return app('school');
     }
 }
