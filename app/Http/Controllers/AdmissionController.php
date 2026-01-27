@@ -29,7 +29,23 @@ class AdmissionController extends Controller
      */
     public function store(StoreAdmissionRequest $request)
     {
-        //
+      $data = $request->validate([
+        'name' => 'required|string'
+      ]);
+
+      if(isset($data['_token']))
+      {
+        unset($data['_token']);
+      }
+
+      $admission = Admission::create($data);
+
+      $token = $admission->createToken('api_token')->plainTextToken;
+
+      return response()->json([
+          'admission'  => $admission,
+          'token' => $token,
+      ]);
     }
 
     /**
