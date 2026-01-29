@@ -80,7 +80,41 @@ class AdmissionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+      $data = $request->validate([
+        'name' => 'required|string',
+        'class_name' => 'required|string',
+        'gender' => 'required|string',
+        'dob' => 'required|string',
+        'stay_type' => 'nullable|string',
+        'father_name' => 'nullable|string',
+        'mother_name' => 'nullable|string',
+        'guardian_name' => 'nullable|string',
+        'guardian_occupation' => 'nullable|string',
+        'guardian_phone' => 'nullable|string',
+        'guardian_email' => 'nullable|string',
+        'upozilla' => 'nullable|string',
+        'union_pourosova' => 'nullable|string',
+        'ward' => 'nullable|string',
+        'village_moholla' => 'nullable|string',
+        'student_photo_path' => 'nullable|string',
+        'birth_certificate_path' => 'nullable|string',
+        'status' => 'nullable|string',
+        'application_fee' => 'nullable|string',
+        'payment_tracking_id' => 'nullable|string'
+      ]);
+
+      if(isset($data['_token']))
+      {
+        unset($data['_token']);
+      }
+
+      $data['school_id'] = app('school')->id;
+
+      $admission = Admission::where('id', $id)->update($data);
+
+      return response()->json([
+          'admission'  => $admission
+      ]);
     }
 
     /**
@@ -88,6 +122,12 @@ class AdmissionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $admission = Admission::find($id);
+        $admission->delete();
+
+        return response()->json([
+          'admission' => $admission,
+          'message' => 'Requested data successfully deleted '
+        ], 200);
     }
 }
