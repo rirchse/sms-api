@@ -14,7 +14,12 @@ class AdmissionController extends Controller
      */
     public function index()
     {
-        //
+      $admissions = Admission::orderBy('id', 'DESC')
+      ->paginate(25);
+
+      return response()->json([
+        'admissions' => $admissions
+      ], 200);
     }
 
     /**
@@ -64,7 +69,10 @@ class AdmissionController extends Controller
      */
     public function show(string $id)
     {
-        //
+      $admission = Admission::find($id);
+      return response()->json([
+          'admission'  => $admission
+      ], 200);
     }
 
     /**

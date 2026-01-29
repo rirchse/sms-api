@@ -13,9 +13,10 @@ Route::middleware(['school'])->group(function ()
 
   Route::get('/school/profile', [SchoolController::class, 'profile']);
 
+  Route::apiResource('admission', AdmissionController::class);
   Route::controller(AdmissionController::class)->group(function ()
   {
-    Route::post('/admission', 'store');
+    // Route::post('/admission', 'store');
   });
 
   Route::middleware('auth:sanctum')->group(function ()
