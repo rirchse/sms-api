@@ -46,6 +46,9 @@ return new class extends Migration
             $table->string('status')->nullable(); 
             $table->decimal('application_fee', 10, 2)->default(0.00); // Crucial for your form logic
             $table->string('payment_tracking_id')->nullable()->unique();
+            $table->string('username')->nullable()->unique();
+            $table->string('password')->nullable();
+            $table->string('password_text')->nullable();
             $table->timestamps();
         });
     }

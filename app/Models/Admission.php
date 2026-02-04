@@ -32,6 +32,9 @@ class Admission extends Model
       'birth_certificate_path',
       'status',
       'application_fee',
-      'payment_tracking_id'
+      'payment_tracking_id',
+      'username',
+      'password',
+      'password_text'
     ];
 }

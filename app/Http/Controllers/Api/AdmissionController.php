@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Admission;
 use App\Models\User;
 
@@ -55,7 +57,20 @@ class AdmissionController extends Controller
         unset($data['_token']);
       }
 
-      $data['school_id'] = app('school')->id;
+      $school_id = app('school')->id;
+
+      $data['school_id'] = $school_id;
+
+      // 1. Generate a UNIQUE 6-digit username
+      do {
+        $year = now()->format('Y');
+        $id = random_int(1000, 9990);
+        $username = "{$year}-{$school_id}-{$id}";
+        $data['username'] = $username;
+      } while (Admission::where('username', $username)->exists());
+      
+      $data['password'] = Hash::make(Str::random(6));
+      $data['password_text'] = Str::random(6);
 
       $admission = Admission::create($data);
 
