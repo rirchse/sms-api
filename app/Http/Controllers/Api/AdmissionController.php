@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\AdmissionAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -72,10 +73,30 @@ class AdmissionController extends Controller
       $data['password'] = Hash::make(Str::random(6));
       $data['password_text'] = Str::random(6);
 
-      $admission = Admission::create($data);
+      try {
+
+        $admission = Admission::create($data);
+        
+        $data['admission_id'] = $admission->id;
+
+        //admission auth controller object
+        $admission_auth = new AdmissionAuthController;
+  
+        //create admission authentication
+        $token = $admission_auth->register($data);
+  
+        return response()->json([
+          'admission'  => $admission,
+          'token' => $token
+        ]);
+      }
+      catch(\Exception $e)
+      {
+        return response()->json(['error' => $e->getMessage()]);
+      }
 
       return response()->json([
-          'admission'  => $admission
+        'message' => 'Registration failed!'
       ]);
     }
 

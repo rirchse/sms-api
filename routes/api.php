@@ -5,11 +5,29 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SchoolController;
 use App\Http\Controllers\Api\AdmissionController;
+use App\Http\Controllers\Api\AdmissionAuthController;
 
 Route::middleware(['school'])->group(function ()
 {
   Route::post('/register', [AuthController::class, 'register']);
   Route::post('/login', [AuthController::class, 'login']);
+
+  Route::prefix('admission')->group(function()
+  {
+    Route::controller(AdmissionAuthController::class)->group(function()
+    {
+      Route::post('/register', 'register');
+      Route::post('/login', 'login');
+    });
+    
+    Route::middleware('auth:admission')->group(function()
+    {
+      Route::get('/profile', function()
+      {
+        return auth()->user();
+      });
+    });
+  });
 
   Route::get('/school/profile', [SchoolController::class, 'profile']);
 
