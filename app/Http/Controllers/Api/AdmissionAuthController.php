@@ -28,6 +28,11 @@ class AdmissionAuthController extends Controller
     {
         $school = app('school');
 
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
         $user = AdmissionUser::where('school_id', $school->id)
             ->where('username', $request->username)
             ->first();
