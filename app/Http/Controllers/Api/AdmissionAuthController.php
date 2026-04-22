@@ -43,6 +43,9 @@ class AdmissionAuthController extends Controller
 
         $token = $user->createToken('admission-token')->plainTextToken;
 
+        //static for test
+        $user['role'] = 'student';
+
         return response()->json([
             'token' => $token,
             'user' => $user
