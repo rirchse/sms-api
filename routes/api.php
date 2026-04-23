@@ -12,6 +12,15 @@ Route::middleware(['school'])->group(function ()
   Route::post('/register', [AuthController::class, 'register']);
   Route::post('/login', [AuthController::class, 'login']);
 
+  Route::get('/school/profile', [SchoolController::class, 'profile']);
+
+  Route::apiResource('admission', AdmissionController::class);
+  Route::controller(AdmissionController::class)->group(function ()
+  {
+    // Route::post('/admission', 'store');
+  });
+
+
   Route::prefix('admission')->group(function()
   {
     Route::controller(AdmissionAuthController::class)->group(function()
@@ -29,31 +38,27 @@ Route::middleware(['school'])->group(function ()
     });
   });
 
-  Route::get('/school/profile', [SchoolController::class, 'profile']);
-
-  Route::apiResource('admission', AdmissionController::class);
-  Route::controller(AdmissionController::class)->group(function ()
-  {
-    // Route::post('/admission', 'store');
-  });
-
   Route::middleware('auth:sanctum')->group(function ()
   {
-      Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 
-      Route::get('/me', function (Request $request) {
-          return $request->user();
+    Route::prefix('admin')->group(function()
+    {
+      Route::get('/profile', function (Request $request) {
+        return $request->user();
       });
 
-      Route::middleware(['auth:sanctum', 'role:admin'])->group(function ()
-      {
-        Route::get('/admin/dashboard', fn () => 'Admin only');
-      });
+      Route::get('/admission', [AdmissionController::class, 'index']);
+    });
+
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function ()
+    {
+      Route::get('/admin/dashboard', fn () => 'Admin only');
+    });
       
-      Route::middleware(['auth:sanctum', 'permission:view users'])->get(
-        '/users',
-        fn () => 'Users list'
-      );
-    
+    Route::middleware(['auth:sanctum', 'permission:view users'])->get(
+      '/users',
+      fn () => 'Users list'
+    );
   });
 });
