@@ -15,9 +15,9 @@ class AdmissionAuthController extends Controller
         $user = AdmissionUser::create([
             'school_id' => $school->id,
             'admission_id' => $data['admission_id'],
-            'name' => $data['name'],
+            'name' => $data['name_en'],
             'username' => $data['username'],
-            'password' => bcrypt($data['password_text']),
+            'password' => $data['password'],
         ]);
 
         $token = $user->createToken('admission-token')->plainTextToken;

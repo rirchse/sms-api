@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\AdmissionAuthController;
+use App\Http\Controllers\SourceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -31,26 +32,65 @@ class AdmissionController extends Controller
     public function store(Request $request)
     {
       $data = $request->validate([
-        'name' => 'required|string',
-        'class_name' => 'required|string',
-        'gender' => 'required|string',
-        'dob' => 'required|string',
-        'stay_type' => 'nullable|string',
-        'father_name' => 'nullable|string',
-        'mother_name' => 'nullable|string',
+        'name_en' => 'nullable|string',
+        'name_bn' => 'nullable|string',
+        'name_ar' => 'nullable|string',
+        'dob' => 'nullable|string',
+        'birth_certificate_no' => 'nullable|string',
+        'gender' => 'nullable|string',
+        'height' => 'nullable|string',
+        'weight' => 'nullable|string',
+        'age' => 'nullable|string',
+        'nationality' => 'nullable|string',
+        'blood_group' => 'nullable|string',
+        'identify_sign' => 'nullable|string',
+        'present_village' => 'nullable|string',
+        'present_post' => 'nullable|string',
+        'present_upazilla' => 'nullable|string',
+        'present_post_code' => 'nullable|string',
+        'present_zilla' => 'nullable|string',
+        'permanent_village' => 'nullable|string',
+        'permanent_post' => 'nullable|string',
+        'permanent_upazilla' => 'nullable|string',
+        'permanent_zilla' => 'nullable|string',
+        'permanent_post_code' => 'nullable|string',
+        'father_name_bn' => 'nullable|string',
+        'father_name_en' => 'nullable|string',
+        'father_education' => 'nullable|string',
+        'father_occupation' => 'nullable|string',
+        'father_monthly_earning' => 'nullable|string',
+        'father_mobile_no' => 'nullable|string',
+        'father_nid_no' => 'nullable|string',
+        'father_dob' => 'nullable|string',
+        'mother_name_bn' => 'nullable|string',
+        'mother_name_en' => 'nullable|string',
+        'mother_education' => 'nullable|string',
+        'mother_occupation' => 'nullable|string',
+        'mother_monthly_earning' => 'nullable|string',
+        'mother_mobile_no' => 'nullable|string',
+        'mother_nid_no' => 'nullable|string',
+        'mother_dob' => 'nullable|string',
         'guardian_name' => 'nullable|string',
+        'guardian_student_relation' => 'nullable|string',
+        'guardian_present_address' => 'nullable|string',
+        'guardian_permanent_address' => 'nullable|string',
+        'guardian_education' => 'nullable|string',
         'guardian_occupation' => 'nullable|string',
-        'guardian_phone' => 'nullable|string',
-        'guardian_email' => 'nullable|string',
-        'upozilla' => 'nullable|string',
-        'union_pourosova' => 'nullable|string',
-        'ward' => 'nullable|string',
-        'village_moholla' => 'nullable|string',
-        'student_photo_path' => 'nullable|string',
-        'birth_certificate_path' => 'nullable|string',
-        'status' => 'nullable|string',
+        'guardian_monthly_earning' => 'nullable|string',
+        'guardian_mobile_no' => 'nullable|string',
+        'guardian_nid_no' => 'nullable|string',
+        'guardian_dob' => 'nullable|string',
+        'class_name' => 'nullable|string',
+        'session_name' => 'nullable|string',
+        'division' => 'nullable|string',
+        'previous_institute_name' => 'nullable|string',
+        'sibling_details' => 'nullable|string',
+        'student_photo' => 'nullable|image:mimes:jpg,jpeg,png,gif|max:1000',
+        'student_signature' => 'nullable|image:mimes:jpg,jpeg,png,gif|max:1000',
         'application_fee' => 'nullable|string',
-        'payment_tracking_id' => 'nullable|string'
+        'payment_tracking_id' => 'nullable|string',
+        'username' => 'nullable|string',
+        'password' => 'nullable|string',
       ]);
 
       if(isset($data['_token']))
@@ -71,7 +111,19 @@ class AdmissionController extends Controller
       } while (Admission::where('username', $username)->exists());
       
       $data['password'] = Hash::make(Str::random(6));
-      $data['password_text'] = Str::random(6);
+      // $data['password_text'] = Str::random(6);
+
+      //file upload
+      $source = new SourceController;
+      if($request->hasFile('student_photo'))
+      {
+        $data['student_photo'] = $source->fileUpload($data['student_photo'], 'admission/photo/');
+      }
+
+      if($request->hasFile('student_signature'))
+      {
+        $data['student_signature'] = $source->fileUpload($data['student_signature'], 'admission/nid/');
+      }      
 
       try {
 
