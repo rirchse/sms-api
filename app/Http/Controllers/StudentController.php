@@ -13,15 +13,10 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+      $students = Student::latest()->paginate(25);
+      return response()->json([
+        'students' => $students
+      ], 200);
     }
 
     /**
@@ -37,15 +32,11 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        //
-    }
+      $student = Student::find($student);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Student $student)
-    {
-        //
+      return response()->json([
+        'student' => $student
+      ], 200);
     }
 
     /**
@@ -61,6 +52,11 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+      $student = Student::find($student);
+      $student->delete();
+
+      return resonse()->json([
+        'message' => 'The student deleted'
+      ], 200);
     }
 }

@@ -74,4 +74,9 @@ class Admission extends Model
       'username',
       'password',
     ];
+
+    public function payment()
+    {
+      return $this->belongsTo(Payment::class);
+    }
 }

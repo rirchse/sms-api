@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained();
-            $table->foreignId('user_id')->constrained(); // Linked to Guardian
-            $table->string('student_id_number')->unique(); // e.g., SMS-2025-001
-            $table->string('name');
-            $table->string('class_name');
-            $table->integer('roll_number')->nullable();
-            $table->string('status')->nullable();
+            $table->foreignId('admission_id')->constrained();
+            $table->string('payment_type')->nullable();
+            $table->string('transaction_id')->nullable();
+            $table->string('account_no')->nullable();
+            $table->string('paid_amount')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('payments');
     }
 };

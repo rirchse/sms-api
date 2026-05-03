@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSchoolRequest;
-use App\Http\Requests\UpdateSchoolRequest;
-use App\Models\School;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class SchoolController extends Controller
 {
@@ -17,17 +16,9 @@ class SchoolController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSchoolRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,15 +26,7 @@ class SchoolController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(School $school)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(School $school)
+    public function show(string $id)
     {
         //
     }
@@ -51,7 +34,7 @@ class SchoolController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSchoolRequest $request, School $school)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -59,8 +42,13 @@ class SchoolController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(School $school)
+    public function destroy(string $id)
     {
         //
+    }
+
+    public function profile()
+    {
+      return app('school');
     }
 }
