@@ -123,7 +123,7 @@ class AdmissionController extends Controller
       if($request->hasFile('student_signature'))
       {
         $data['student_signature'] = $source->fileUpload($data['student_signature'], 'admission/nid/');
-      }      
+      }
 
       try {
 
@@ -169,7 +169,7 @@ class AdmissionController extends Controller
     public function update(Request $request, string $id)
     {
       $data = $request->validate([
-        'name_en' => 'nullable|string',
+        'name_en' => 'required|string',
         'name_bn' => 'nullable|string',
         'name_ar' => 'nullable|string',
         'dob' => 'nullable|string',
@@ -231,11 +231,50 @@ class AdmissionController extends Controller
       ]);
 
       $data['school_id'] = app('school')->id;
+      $admission = Admission::find($id);
+      $xphoto = public_path($admission->student_photo);
+      $xsignature = public_path($admission->student_signature);
 
-      $admission = Admission::where('id', $id)->update($data);
+      //file upload
+      $source = new SourceController;
+      if($request->hasFile('student_photo'))
+      {
+        $data['student_photo'] = $source->fileUpload($data['student_photo'], 'admission/photo/');
+
+        //delete existing photo
+        if(File::exists($xphoto))
+        {
+          File::delete($xphoto);
+        }
+      }
+
+      if($request->hasFile('student_signature'))
+      {
+        $data['student_signature'] = $source->fileUpload($data['student_signature'], 'admission/nid/');
+        
+        //delete existing photo
+        if(File::exists($xsignature))
+        {
+          File::delete($xsignature);
+        }
+      }
+
+      try {
+
+        $admission = Admission::where('id', $id)->update($data);
+
+        return response()->json([
+            'admission'  => $admission,
+            'message' => 'Admission data updated'
+        ]);
+      }
+      catch(\Exception $e)
+      {
+        return $e->getMessage();
+      }
 
       return response()->json([
-          'admission'  => $admission
+        'message' => 'Unknow error'
       ]);
     }
 

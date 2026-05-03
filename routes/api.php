@@ -34,7 +34,8 @@ Route::middleware(['school'])->group(function ()
       
       Route::controller(AdmissionController::class)->group(function ()
       {
-        Route::put('/admission/{id}', 'update');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
         Route::get('/payments/{admission}', 'payments');
       });
 
