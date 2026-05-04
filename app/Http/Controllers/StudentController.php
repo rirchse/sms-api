@@ -22,7 +22,7 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreStudentRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -30,9 +30,9 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show($id)
     {
-      $student = Student::find($student);
+      $student = Student::find($id);
 
       return response()->json([
         'student' => $student
@@ -42,7 +42,7 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStudentRequest $request, Student $student)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -50,9 +50,9 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy($id)
     {
-      $student = Student::find($student);
+      $student = Student::find($id);
       $student->delete();
 
       return resonse()->json([
