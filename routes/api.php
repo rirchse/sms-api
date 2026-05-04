@@ -11,9 +11,6 @@ use App\Http\Controllers\StudentController;
 
 Route::middleware(['school'])->group(function ()
 {
-  Route::post('/register', [AuthController::class, 'register']);
-  Route::post('/login', [AuthController::class, 'login']);
-
   Route::get('/school/profile', [SchoolController::class, 'profile']);
 
   Route::prefix('admission')->group(function()
@@ -46,12 +43,14 @@ Route::middleware(['school'])->group(function ()
     });
   });
 
-  Route::middleware('auth:sanctum')->group(function ()
+  Route::prefix('admin')->group(function()
   {
-    Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::prefix('admin')->group(function()
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+    
+    Route::middleware('auth:admin')->group(function ()
     {
+      Route::post('/logout', [AuthController::class, 'logout']);
       Route::get('/profile', function (Request $request) {
         return $request->user();
       });
@@ -66,17 +65,17 @@ Route::middleware(['school'])->group(function ()
       Route::apiResource('/payment', PaymentController::class);
       Route::apiResource('/student', StudentController::class);
     });
-
-    Route::middleware(['auth:sanctum', 'role:admin'])->group(function ()
-    {
-      Route::get('/admin/dashboard', fn () => 'Admin only');
-    });
-      
-    Route::middleware(['auth:sanctum', 'permission:view users'])->get(
-      '/users',
-      fn () => 'Users list'
-    );
   });
+
+  Route::middleware(['auth:admin', 'role:admin'])->group(function ()
+  {
+    Route::get('/admin/dashboard', fn () => 'Admin only');
+  });
+    
+  Route::middleware(['auth:admin', 'permission:view users'])->get(
+    '/users',
+    fn () => 'Users list'
+  );
 });
 
 // cache clear

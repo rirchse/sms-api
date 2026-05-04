@@ -51,4 +51,11 @@ class AdmissionAuthController extends Controller
             'user' => $user
         ]);
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken('admission-token')->delete();
+
+        return response()->json(['message' => 'Logged out']);
+    }
 }

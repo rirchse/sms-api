@@ -40,15 +40,20 @@ return [
           'driver' => 'session',
           'provider' => 'users',
         ],
+
+        'admin' => [
+          'driver' => 'sanctum',
+          'provider' => 'admins',
+        ],
         
-        'api' => [
-        'driver' => 'sanctum',
-        'provider' => 'users',
+        'student' => [
+          'driver' => 'sanctum',
+          'provider' => 'students',
         ],
         
         'admission' => [
-        'driver' => 'sanctum',
-        'provider' => 'admission_users',
+          'driver' => 'sanctum',
+          'provider' => 'admissions',
         ],
     ],
 
@@ -75,7 +80,17 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        'admission_users' => [
+        'admins' => [
+          'driver' => 'eloquent',
+          'model' => App\Models\User::class,
+        ],
+
+        'students' => [
+          'driver' => 'eloquent',
+          'model' => App\Models\Student::class,
+        ],
+
+        'admissions' => [
           'driver' => 'eloquent',
           'model' => App\Models\AdmissionUser::class,
         ],

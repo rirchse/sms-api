@@ -25,7 +25,7 @@ class AuthController extends Controller
         // assign default role
         $user->assignRole('user');
 
-        $token = $user->createToken('api_token')->plainTextToken;
+        $token = $user->createToken('admin-token')->plainTextToken;
 
         return response()->json([
             'user'  => $user,
@@ -46,7 +46,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        $token = $user->createToken('api_token')->plainTextToken;
+        $token = $user->createToken('admin-token')->plainTextToken;
 
         return response()->json([
             'user'  => $user,
@@ -56,7 +56,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $request->user()->currentAccessToken('admin-token')->delete();
 
         return response()->json(['message' => 'Logged out']);
     }
